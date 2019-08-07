@@ -45,6 +45,7 @@ export default {
   }
   #app{
     padding-top: 40px;
+    padding-bottom: 50px;
   }
   .v-enter{
     opacity: 0;
@@ -70,7 +71,6 @@ export default {
   }
   .vue-content{
     background: #fff;
-    height: 644px;
     overflow-x: hidden;
   }
   .vue-footer{

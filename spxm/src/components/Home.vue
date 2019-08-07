@@ -1,28 +1,24 @@
 <template>
-    <div>
+    <div class="box">
         <!-- 轮播图区域 -->
-        <div class="swiper-container">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide"><img src="../assets/image/1.jpg"></div>
-                <div class="swiper-slide"><img src="../assets/image/2.jpg"></div>
-                <div class="swiper-slide"><img src="../assets/image/3.jpg"></div>
-                <div class="swiper-slide"><img src="../assets/image/4.jpg"></div>
-            </div>
-            <div class="swiper-pagination"></div>
-        </div>
+        <mt-swipe>
+            <mt-swipe-item v-for="(item, index) in arr" :key="index">
+                <img :src="item.img">
+            </mt-swipe-item>
+        </mt-swipe>
 
         <!-- 九宫格区域 -->
         <div class="mui-content">
             <ul class="mui-table-view mui-grid-view mui-grid-9">
                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                    <a href="#">
+                    <router-link to="/home/newslist">
                         <span class="mui-icon mui-icon-home"></span>
                         <div class="mui-media-body">新闻资讯</div>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
                     <a href="#">
-                        <span class="mui-icon mui-icon-email"><span class="mui-badge">5</span></span>
+                        <span class="mui-icon mui-icon-email"></span>
                         <div class="mui-media-body">图片分享</div>
                     </a>
                 </li>
@@ -52,10 +48,18 @@
                 </li>
             </ul> 
         </div>
+
+
     </div>
 </template>
 
 <script>
+import '../../node_modules/mint-ui/lib/swipe/style.css'
+import { Swipe, SwipeItem } from 'mint-ui';
+Vue.component(Swipe.name, Swipe);
+Vue.component(SwipeItem.name, SwipeItem);
+
+
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 Vue.use(VueResource)
@@ -69,18 +73,20 @@ import '../assets/css/swiper.css'
 export default {
     data() {
         return {
-            
+            arr: []
         }
     },
     created() {
-        // this.getLunbotu()
+        this.getLunbotu()
     },
     methods: {
         // 获取轮播图数据的方法
         getLunbotu(){
-            // this.$http.get('http://vue.studyit.io/api/getlunbo').then( result => {
-            //     console.log(result.body)
-            // })
+            this.$http.get('api/getlunbo').then( result => {
+                // console.log(result.body)
+                this.arr = result.body.message
+                // console.log(this.arr)
+            })
         }
     },
     mounted() {
@@ -97,12 +103,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.swiper-container{
-    width: 100%;
+.box{
+    overflow-x: hidden;
+}
+.mint-swipe{
     height: 300px;
     img{
         width: 100%;
         height: 100%;
+    }
+    .mint-swipe-indicator.is-active{
+        background: black;
     }
 }
 </style>
