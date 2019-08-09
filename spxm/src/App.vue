@@ -1,7 +1,8 @@
 <template>
   <div id="app">
     <div class="vue-title">
-      Vue项目
+      <!-- <div @click="goHistory">&lt; 返回</div> -->
+      <span>Vue项目</span> 
     </div>
     <div class="vue-content">
       <transition>
@@ -19,7 +20,7 @@
         <div> 会员 </div> 
       </router-link>
       <router-link to="/shopp">
-        <div class="oper">0</div>
+        <div class="oper" id="badge">0</div>
         <img src="./assets/image/购物车满.png" alt="">
         <div> 购物车 </div> 
       </router-link>
@@ -34,7 +35,15 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  created() {
+    this.goHistory()
+  },
+  methods: {
+    goHistory(){
+      // this.$router.go(-1)
+    }
+  },
 }
 </script>
 
@@ -56,18 +65,32 @@ export default {
     transform: translateX(-100%);
     position: absolute;
   }
-  .v-enter-active,.v-leave-active{transition: all .5s linear;}
+  .v-enter-active,.v-leave-active{
+    transition: all .5s linear;
+  }
   .vue-title{
     width: 100%;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    color: white;
+    background: blue;
     position: fixed;
     top: 0;
     left: 0;
-    background: blue;
+    height: 40px;
+    line-height: 40px;
     z-index: 10;
+    display: flex;
+    span{
+      width: 70%;
+      height: 40px;
+      display: block;
+      line-height: 40px;
+      text-align: center;
+      color: white;
+    }
+    div{
+      width: 20%;
+      text-align: center;
+      color: #fff;
+    }
   }
   .vue-content{
     background: #fff;
@@ -111,4 +134,35 @@ export default {
       color: red;
     }
   }
+  .preview figure {
+    float: left;
+    width: 30%;
+    height:calc(30vw - 0px);
+    margin: 1.5%;
+  }
+
+  .preview figure img {
+    width: 100%;
+  }
+  
+  .my-gallery{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    figure {
+      width: 30%;
+      margin: 5px;
+      a{
+        img{
+          border: 0;
+          width: 100%;
+          box-shadow: 0 0 5px #999;
+        }
+      }
+    }
+  }
+
+img{
+    width: 100%;
+}
 </style>

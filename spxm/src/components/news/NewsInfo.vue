@@ -35,7 +35,7 @@ export default {
             this.$http.get('api/getnew/' + this.id).then(reslut => {
                 if(reslut.body.status === 0){
                     this.newsInfo = reslut.body.message
-                    console.log(this.newsInfo)
+                    // console.log(this.newsInfo)
                 }else{
                     Toast('获取数据失败')
                 }

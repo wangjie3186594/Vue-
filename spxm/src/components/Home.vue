@@ -1,15 +1,11 @@
 <template>
     <div class="box">
         <!-- 轮播图区域 -->
-        <mt-swipe>
-            <mt-swipe-item v-for="(item, index) in arr" :key="index">
-                <img :src="item.img">
-            </mt-swipe-item>
-        </mt-swipe>
+        <Swipers :arr="arr" :isfull="true"></Swipers>
 
         <!-- 九宫格区域 -->
         <div class="mui-content">
-            <ul class="mui-table-view mui-grid-view mui-grid-9">
+            <ul class="mui-table-view mui-grid-view mui-grid-9" style="margin-top:0">
                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
                     <router-link to="/home/newslist">
                         <span class="mui-icon mui-icon-home"></span>
@@ -17,16 +13,16 @@
                     </router-link>
                 </li>
                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                    <a href="#">
+                    <router-link to="/home/photolist">
                         <span class="mui-icon mui-icon-email"></span>
                         <div class="mui-media-body">图片分享</div>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                    <a href="#">
+                    <router-link to="/home/goodslist">
                         <span class="mui-icon mui-icon-chatbubble"></span>
                         <div class="mui-media-body">商品购买</div>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
                     <a href="#">
@@ -54,6 +50,7 @@
 </template>
 
 <script>
+// 按需导入 swiper 的组件
 import '../../node_modules/mint-ui/lib/swipe/style.css'
 import { Swipe, SwipeItem } from 'mint-ui';
 Vue.component(Swipe.name, Swipe);
@@ -61,14 +58,21 @@ Vue.component(SwipeItem.name, SwipeItem);
 
 
 import Vue from 'vue';
+
+// 引入 vue-resource 的组件
 import VueResource from 'vue-resource';
 Vue.use(VueResource)
 
+// 引入 mui-ui 的组件
 import '../assets/dist/css/mui.min.css'
 import MintUi from 'mint-ui';
 
+// 引入 swiper 组件
 import Swiper from 'swiper';
 import '../assets/css/swiper.css'
+
+// 引入轮播图组件
+import Swipers from './subcomponents/Swiper'
 
 export default {
     data() {
@@ -99,6 +103,9 @@ export default {
             },
         })
     },
+    components:{
+        Swipers
+    }
 }
 </script>
 
@@ -106,14 +113,5 @@ export default {
 .box{
     overflow-x: hidden;
 }
-.mint-swipe{
-    height: 300px;
-    img{
-        width: 100%;
-        height: 100%;
-    }
-    .mint-swipe-indicator.is-active{
-        background: black;
-    }
-}
+
 </style>

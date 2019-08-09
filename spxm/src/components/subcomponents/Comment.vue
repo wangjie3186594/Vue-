@@ -2,8 +2,8 @@
     <div class="cmt-cont">
         <h3>发表评论</h3>
         <hr>
-        <textarea placeholder="请输入要吐槽的内容(最多吐槽120字)"></textarea>
-        <mt-button type="primary" siza="large" class="mui-btn mui-btn-primary ar">发表评论</mt-button>
+        <textarea placeholder="请输入要吐槽的内容(最多吐槽120字)" v-model="msg"></textarea>
+        <mt-button type="primary" siza="large" class="mui-btn mui-btn-primary ar" @click="postComment">发表评论</mt-button>
         <div class="cmt-list">
             <div class="cmt-item" v-for="(item, index) in pageList" :key="item.add_time">
                 <div class="cmt-title">
@@ -25,14 +25,15 @@ export default {
     data() {
         return {
             pageIndex: 1, // 默认展示评论第一页数据
-            pageList: []
+            pageList: [],
+            msg: '' //评论输入的内容
         }
     },
     created() {
         this.getComments()
     },
     methods: {
-        //获取评论
+        //数据中获取评论
         getComments(){
             this.$http.get("api/getcomments/"+ this.id +"?pageindex=" + this.pageIndex ).then(result => {
                 if(result.body.status === 0){
@@ -49,6 +50,23 @@ export default {
         getMore(){
             this.pageIndex ++;
             this.getComments()
+        },
+        postComment(){
+            // 校验 msg 数据是否为空
+            if(this.msg.trim().length === 0){
+                return Toast('评论内容不能为空！')
+            }
+            // 参数1：请求的URL地址
+            // 参数2：提交给服务器的数据对象 ( content: this.msg )
+            // 参数3：定义提交时表单数据的格式 ( emulateJSON:true )       trim：清除空格
+            this.$http.post('api/postcomment/' + this.$route.params.id, { contnet:this.msg.trim() }).then(function(result){
+                if(result.body.status === 0){
+                    // 拼接一个评论对象
+                    let cont = { user_name: '匿名用户', add_time: Date.now(), content: this.msg.trim()}
+                    this.pageList.unshift(cont)
+                    this.msg = ''
+                }
+            })
         }
     },
     props: ["id"]
