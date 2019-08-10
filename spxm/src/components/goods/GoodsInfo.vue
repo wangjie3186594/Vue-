@@ -21,16 +21,16 @@
 
         <!-- 商品购买区域 -->
         <div class="mui-card">
-            <div class="mui-card-header">{{goodslist.title}}</div>
+            <div class="mui-card-header">{{goodsinfo.title}}</div>
             <div class="mui-card-content">
                 <div class="mui-card-content-inner">
                     <p class="price">
-                        市场价：<del>￥{{goodslist.market_price}}</del>&nbsp;&nbsp;销售价
-                        <span class="now_price">￥{{goodslist.sell_price}}</span>
+                        市场价：<del>￥{{goodsinfo.market_price}}</del>&nbsp;&nbsp;销售价
+                        <span class="now_price">￥{{goodsinfo.sell_price}}</span>
                     </p>
                     <p class="shopp">
                         <span>购买数量：</span> 
-                        <goods-number @getCount="getSelectedCount" :max="goodslist.stock_quantity"></goods-number>
+                        <goods-number @getCount="getSelectedCount" :max="goodsinfo.stock_quantity"></goods-number>
                     </p>
                     <p>
                         <mt-button ty="primary" size="small" class="ae">立即购买</mt-button>
@@ -51,9 +51,9 @@
             <div class="mui-card-header">商品参数</div>
             <div class="mui-card-content">
                 <div class="mui-card-content-inner">
-                    <p>商品货号：{{goodslist.goods_no}}</p>
-                    <p>库存情况：{{goodslist.stock_quantity}}件</p>
-                    <p>上架时间：{{goodslist.add_time | dateFormat}}</p>
+                    <p>商品货号：{{goodsinfo.goods_no}}</p>
+                    <p>库存情况：{{goodsinfo.stock_quantity}}件</p>
+                    <p>上架时间：{{goodsinfo.add_time | dateFormat}}</p>
                 </div>
             </div>
             <div class="mui-card-footer">
@@ -74,7 +74,7 @@ export default {
         return {
             id:this.$route.params.id, // 将路由参数中的 id 挂载到 data，方便调用
             lunbotu: [], // 存放轮播图数组
-            goodslist: {}, // 存放商品参数的数组
+            goodsinfo: {}, // 存放商品参数的数组
             ballFlag: false, //小球的显示与隐藏
             selectedCound: 1 //用户选中的商品数量
         }
@@ -103,7 +103,8 @@ export default {
         getGoodsInfo(){
             this.$http.get('api/goods/getinfo/' + this.id).then( result => {
                 if(result.body.status === 0){
-                    this.goodslist = result.body.message[0]
+                    this.goodsinfo = result.body.message[0]
+                    // console.log(this.goodsinfo)
                 }
             })
         },
@@ -118,6 +119,14 @@ export default {
         // 控制小球的显示与隐藏
         addFoShopp(){
             this.ballFlag = !this.ballFlag
+            // {id: 商品id, count:要购买的数量, price: 商品单价, selcecte: true // 是否被选中}
+
+            // 拼接出一个要保存到 store 中 car 数组里的商品信息对象
+            let goodsinfo = {id: this.id, count: this.selectedCound, price: this.goodsinfo.sell_price, selected: true}
+            // console.log(goodsinfo.count)
+
+            // 调用 sotre 中的 mutations 来将商品加入购物车
+            this.$store.commit('addToCar',goodsinfo)
         },
         // 设置小球的初始动画样式
         beforeEnter(el){

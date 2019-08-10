@@ -1,9 +1,12 @@
 <template>
   <div id="app">
-    <div class="vue-title">
-      <!-- <div @click="goHistory">&lt; 返回</div> -->
-      <span>Vue项目</span> 
-    </div>
+    
+    <mt-header fixed title="Vue项目 购物车">
+      <span slot="left" @click="goBack" v-show="flag">
+        <mt-button icon="back">返回</mt-button>
+      </span>
+    </mt-header>
+
     <div class="vue-content">
       <transition>
         <router-view/>
@@ -20,7 +23,7 @@
         <div> 会员 </div> 
       </router-link>
       <router-link to="/shopp">
-        <div class="oper" id="badge">0</div>
+        <div class="oper" id="badge"> {{ $store.getters.getAllCount }} </div>
         <img src="./assets/image/购物车满.png" alt="">
         <div> 购物车 </div> 
       </router-link>
@@ -36,14 +39,30 @@
 <script>
 export default {
   name: 'App',
-  created() {
-    this.goHistory()
-  },
-  methods: {
-    goHistory(){
-      // this.$router.go(-1)
+  data() {
+    return {
+      flag: false
     }
   },
+  created() {
+    this.flag = this.$route.path === '/home' ? false : true
+  },
+  methods: {
+    goBack(){
+      // 点击后退
+      this.$router.go(-1)
+      
+    }
+  },
+  watch: {
+    '$route.path': function(newVal){
+      if(newVal === '/home'){
+        this.flag = false
+      }else{
+        this.flag = true
+      }
+    }
+  }
 }
 </script>
 
